@@ -1,4 +1,4 @@
 'use strict';
 
 angular.module('classViewApp')
-  .factory('_', window._);
+  .factory('_', () => window._);

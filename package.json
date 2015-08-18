@@ -1,7 +1,7 @@
 {
-  "name": "class-view",
+  "name": "ClassView",
   "version": "0.0.0",
-  "main": "server/app.js",
+  "main": "dist/public/app/app.js",
   "dependencies": {
     "express": "~4.9.0",
     "morgan": "~1.0.0",

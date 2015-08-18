@@ -7,20 +7,22 @@ angular.module('classViewApp.resources')
   	});
   }])
 
-  .factory('buildIntervalQuery', ({startTime, endTime}) => {
+  .factory('buildIntervalQuery', () => {
   	// API Docs specify query param format:
   	// 	http://sailsjs.org/documentation/reference/blueprint-api/find-where#?parameters
-  	return {
-  		// Want videos between start and end interval
-		'where': JSON.stringify({
-			'startTime': {
-				'>=': startTime
-			},
-			'endTime': {
-				'<=': endTime
-			}
-		})
-	};
+  	return ({startTime, endTime}) => {
+      return {
+      		// Want videos between start and end interval
+    		'where': JSON.stringify({
+    			'startTime': {
+    				'>=': startTime
+    			},
+    			'endTime': {
+    				'<=': endTime
+    			}
+    		})
+    	};
+    };
   })
 
   .factory('getUrlForVideo', ['API_BASE_URL', function (API_BASE_URL) {
