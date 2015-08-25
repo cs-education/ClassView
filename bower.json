@@ -1,7 +1,12 @@
 {
   "name": "class-view",
   "version": "0.0.0",
-  "main": "dist/public/app/*.js",
+  "main": [
+    "dist/public/app/app.js",
+    "dist/public/app/vendor.js",
+    "dist/public/app/app.css",
+    "dist/public/app/vendor.css"
+  ],
   "dependencies": {
     "angular": ">=1.4.*",
     "json3": "~3.3.1",
@@ -14,7 +19,10 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "angular-ui-router": "~0.2.15",
-    "videogular": "~1.2.5"
+    "videogular": "~1.2.5",
+    "videogular-controls": "~1.2.5",
+    "videogular-overlay-play": "~1.2.5",
+    "videogular-themes-default": "~1.2.5"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

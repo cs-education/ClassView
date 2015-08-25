@@ -1,5 +1,5 @@
-<div ng-app="classViewApp">
-	<div ng-controller="MainCtrl">
+<div ng-controller="ClassViewCtrl">
+	<videogular vg-theme="app/classView/classView.css" class="videogular-container">
 		<vg-media vg-src="videoSources">
 		</vg-media>
 		<vg-controls>
@@ -15,5 +15,6 @@
 			</vg-volume>
 			<vg-fullscreen-button></vg-fullscreen-button>
 		</vg-controls>
-	</div>
+		<vg-overlay-play></vg-overlay-play>
+	</videogular>
 </div>

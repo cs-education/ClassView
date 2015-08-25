@@ -6,7 +6,7 @@ angular.module('classViewApp')
       templateUrl: 'app/classView/classView.html',
       restrict: 'EA',
       scope: {
-      	mediaPlayer: '=', // from mediaPlayer service
+      	mediaPlayer: '=', // instance from MediaPlayer factory
       	apiHost: '=?' // optional
       }
     };
