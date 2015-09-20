@@ -16,8 +16,5 @@ angular.module('classViewApp', [
   'classViewApp.resources'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    $urlRouterProvider
-      .otherwise('/');
-
     $locationProvider.html5Mode(true);
   });

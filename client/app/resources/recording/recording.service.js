@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('classViewApp.resources')
-  .factory('recordings', ['$resource', 'API_BASE_URL', function ($resource, API_BASE_URL) {
+  .factory('Recording', ['$resource', 'API_BASE_URL', function ($resource, API_BASE_URL) {
   	return $resource(API_BASE_URL + '/recording/:id', {
   		id: '@id'
   	});
@@ -21,8 +21,8 @@ angular.module('classViewApp.resources')
   .factory('buildIntervalQuery', () => {
   	// API Docs specify query param format:
   	// 	http://sailsjs.org/documentation/reference/blueprint-api/find-where#?parameters
-  	return ({startTime, endTime}) => {
-      return {
+  	return ({startTime, endTime}, sectionID) => {
+      var query = {
       		// Want videos between start and end interval
     		'where': JSON.stringify({
     			'startTime': {
@@ -33,6 +33,12 @@ angular.module('classViewApp.resources')
     			}
     		})
     	};
+
+      if (section) {
+        query.section = sectionID;
+      }
+
+      return query;
     };
   })
 

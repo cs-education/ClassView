@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('classViewApp')
-	.controller('ClassViewCtrl', ($scope, $q, recordings, buildIntervalQuery, getUrlForVideo, formatRecording, _) => {
+	.controller('ClassViewCtrl', ($scope, $q, Course, Section, Recording, buildIntervalQuery, getUrlForVideo, formatRecording, _) => {
 		const SMALL_VIDEO_SEEK_THRESH = 500; // Interval at which small videos will be synchronized with main video (millis)
 
 		$scope.searchResults = [];
@@ -9,10 +9,19 @@ angular.module('classViewApp')
 		$scope.isPlaying     = false;
 		$scope.autoPlay      = false;
 		$scope.currentTime   = new Date(0); // default should be such that nothing can be after it
+
+		function resolvedPromise(val) {
+			var deferred = $q.defer();
+			deferred.resolve(val);
+			return deferred.promise;
+		}
+
+		// initially no sections to search within, will be populated after request for given course info
+		var sectionsPromise = resolvedPromise([]);
 		
 		var lastSynchTime = new Date(0);
 
-	  	function buildVideoObject (recording) {
+	  	function buildVideoObject(recording) {
 	  		return _.merge(recording, {
 	  			'videoSources': [
 		  			{
@@ -23,23 +32,38 @@ angular.module('classViewApp')
 	  		});
 	  	}
 
-	  	$scope.mediaPlayer.onSetInterval(({startTime, endTime}) => {
-	  		var deferred = $q.defer();
+	  	function searchForCourseRecordings({startTime, endTime}) {
+	  		return sectionsPromise
+	  			.then(sections => {
+	  				var sectionRecordingsPromises = sections
+	  					.map(section => {
+	  						var queryParams = buildIntervalQuery({startTime, endTime}, section);
+		  					return Recording
+		  						.query(queryParams)
+		  						.$promise;
+	  					});
 
-	  		recordings
-		  		.query(buildIntervalQuery({startTime, endTime})).$promise
-		  		.then(results => {
+  					return $q.all(sectionRecordingsPromises);
+	  			})
+				.then(sectionRecordingsResults => {
+					// sectionRecordingsResults = [[Recordings for Section], [Recordings for Section], ....]
+					// Just need to put all of these arrays of results into a single array
+					return _.flatten(sectionRecordingsResults);
+				})
+				.then(results => {
+					// results from different sections have been aggregated into one
 		  			results.forEach(formatRecording);
 					$scope.searchResults = results.map(buildVideoObject);
-					// Order primarily by earliest startTime, and then by earliest endTime
-					$scope.searchResults = _.sortByAll($scope.searchResults, ['startTime', 'endTime']);
-					$scope.mainVideo  = $scope.searchResults.shift();
+					// Order primarily by sectionID, then by earliest startTime, and then by earliest endTime
+					$scope.searchResults = _.sortByAll($scope.searchResults, ['section.id', 'startTime', 'endTime']);
+					$scope.mainVideo = $scope.searchResults.shift();
 
-					deferred.resolve(results);
-		  		})
-		  		.catch(err => deferred.reject(err));
+					return results;
+		  		});
+	  	}
 
-	  		return deferred.promise;
+	  	$scope.mediaPlayer.onSetInterval(({startTime, endTime}) => {
+	  		return searchForCourseRecordings({startTime, endTime})
 	  	});
 
 	  	$scope.getUrlForVideo = getUrlForVideo;
@@ -148,5 +172,26 @@ angular.module('classViewApp')
 
 	  	$scope.$watch('currentTime', (newTime, oldTime) => {
 	  		synchronizeSmallVideos(newTime);
+	  	});
+
+	  	function getCourseSectionsPromise(courseID) {
+	  		courseID = courseID || $scope.course;
+	  		return Course.get({id: courseID}).$promise
+	  			.then(course => {
+	  				return course.sections;
+	  			});
+	  	}
+
+	  	$scope.$watch('course', (newCourseID, oldCourseID) => {
+	  		if (newCourseID === oldCourseID) {
+	  			return; // nothing changed, no need to make updates
+	  		}
+
+	  		// New course has been specified, update sectionsPromise and videos in display
+	  		sectionsPromise = getCourseSectionsPromise(newCourseID);
+	  		searchForCourseRecordings({
+	  			startTime: $scope.startTime,
+	  			endTime: $scope.endTime
+	  		});
 	  	});
 	});

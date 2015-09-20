@@ -7,6 +7,7 @@ angular.module('classViewApp')
       restrict: 'EA',
       scope: {
       	mediaPlayer: '=', // instance from MediaPlayer factory
+        course: '=?', // ID of course to search for videos within...optional
       	apiHost: '=?' // optional
       }
     };
