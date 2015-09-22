@@ -15,6 +15,7 @@ angular.module('classViewApp', [
   'com.2fdevs.videogular.plugins.controls',
   'classViewApp.resources'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
+    $httpProvider.interceptors.push('interceptor');
   });
