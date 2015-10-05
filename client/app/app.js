@@ -3,7 +3,7 @@
 angular.module('classViewApp.resources', [
   'ngResource'
 ])
-  .constant('API_BASE_URL', 'http://classcapture.herokuapp.com'); // TODO: Fill in once backend has been uploaded to host
+  .constant('API_BASE_URL', '/api/'); // server will internally forward these calls to API Server
 
 angular.module('classViewApp', [
   'ngCookies',
