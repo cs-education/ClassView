@@ -3,7 +3,7 @@
 angular.module('classViewApp.resources', [
   'ngResource'
 ])
-  .constant('API_BASE_URL', '/api/'); // server will internally forward these calls to API Server
+  .constant('API_BASE_URL', '/api'); // server will internally forward these calls to API Server
 
 angular.module('classViewApp', [
   'ngCookies',
