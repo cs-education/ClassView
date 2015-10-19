@@ -1,0 +1,44 @@
+{
+  "name": "bower-videogular-chromecast",
+  "version": "1.1.3",
+  "authors": [
+    "Benjipott <pott.benjamin@gmail.com>"
+  ],
+  "description": "Videogular chromecast plugin",
+  "main": [
+    "./dist/videogular-chromecast.min.js",
+    "./dist/videogular-chromecast.css"
+  ],
+  "keywords": [
+    "videogular",
+    "videogular-plugin",
+    "videogular-chromecast"
+  ],
+  "ignore": [
+    ".jshintrc",
+    ".gitignore",
+    "**/*.txt"
+  ],
+  "dev-dependencies": {
+    "angular": "~1.3.x",
+    "angular-sanitize": "~1.3.x",
+    "videogular": "latest",
+    "videogular-overlay-play": "latest",
+    "videogular-themes-default": "~1.1.0",
+    "videogular-poster": "~1.1.0",
+    "videogular-buffering": "~1.1.0",
+    "videogular-controls": "~1.1.0"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/benjipott/videogular-chromecast",
+  "_release": "1.1.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.3",
+    "commit": "d3c07b25349aaa69bce08d44894e9ef691490694"
+  },
+  "_source": "git://github.com/benjipott/videogular-chromecast.git",
+  "_target": "~1.1.3",
+  "_originalSource": "videogular-chromecast",
+  "_direct": true
+}
