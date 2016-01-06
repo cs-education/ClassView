@@ -13,10 +13,10 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
       <link rel="stylesheet" href="bower_components/bootstrap-horizon/bootstrap-horizon.css" />
       <link rel="stylesheet" href="bower_components/videogular-chromecast/dist/videogular-chromecast.css" />
       <link rel="stylesheet" href="bower_components/videogular-themes-default/videogular.css" />
+      <link rel="stylesheet" href="bower_components/malhar-angular-dashboard/dist/malhar-angular-dashboard.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -65,6 +65,10 @@
       <script src="bower_components/videogular-chromecast/dist/videogular-chromecast.min.js"></script>
       <script src="bower_components/videogular-controls/vg-controls.js"></script>
       <script src="bower_components/videogular-overlay-play/vg-overlay-play.js"></script>
+      <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+      <script src="bower_components/angular-ui-sortable/sortable.js"></script>
+      <script src="bower_components/malhar-angular-dashboard/dist/malhar-angular-dashboard.js"></script>
+      <script src="bower_components/angular-tiny-eventemitter/dist/angular-tiny-eventemitter.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -75,12 +79,14 @@
           <!-- injector:js -->
           <script src="app/classView/classView.controller.js"></script>
           <script src="app/classView/classView.directive.js"></script>
+          <script src="app/classView/videoWidget/videoWidget.controller.js"></script>
           <script src="app/interceptor/interceptor.service.js"></script>
           <script src="app/lodash/lodash.service.js"></script>
           <script src="app/mediaPlayer/mediaPlayer.service.js"></script>
           <script src="app/resources/course/course.service.js"></script>
           <script src="app/resources/recording/recording.service.js"></script>
           <script src="app/resources/section/section.service.js"></script>
+          <script src="app/videoWidgetDataModel/videoWidgetDataModel.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->

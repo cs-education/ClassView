@@ -1,36 +1,5 @@
 <div ng-controller="ClassViewCtrl">
-	<videogular ng-if="mainVideo" class="videogular-container"
-		vg-player-ready="attatchMainVideoAPI($API)"
-		vg-update-time="onUpdateTime($currentTime)"
-		vg-update-state="onStateChange($state)"
-		vg-auto-play="autoPlay">
-		<vg-media vg-src="mainVideo.videoSources" vg-chromecast title="Course Video Content" description="{{mainVideo.startTime}} to {{mainVideo.endTime}}">
-		</vg-media>
-		<vg-controls>
-			<vg-play-pause-button></vg-play-pause-button>
-			<vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
-			<vg-scrub-bar>
-				<vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-			</vg-scrub-bar>
-			<vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
-			<vg-volume>
-				<vg-mute-button></vg-mute-button>
-				<vg-volume-bar></vg-volume-bar>
-			</vg-volume>
-			<vg-chromecast-button></vg-chromecast-button>
-			<vg-fullscreen-button></vg-fullscreen-button>
-		</vg-controls>
-		<vg-overlay-play></vg-overlay-play>
-	</videogular>
-	<div class="row row-horizon well" ng-if="searchResults.length">
-		<div class="col-md-6" ng-repeat="videoObject in searchResults">
-			<videogular class="videogular-container"
-				ng-click="makeMainVideo(videoObject.id)"
-				vg-player-ready="videoObject.API = $API">
-				<vg-media vg-src="videoObject.videoSources">
-				</vg-media>
-				<vg-overlay-play></vg-overlay-play>
-			</videogular>
-		</slide>
+	<div ng-if="dashboardOptions">
+		<div dashboard="dashboardOptions"></div>
 	</div>
 </div>

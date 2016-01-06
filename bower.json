@@ -24,10 +24,18 @@
     "videogular-chromecast": "~1.1.3",
     "videogular-controls": "~1.2.5",
     "videogular-overlay-play": "~1.2.5",
-    "videogular-themes-default": "~1.2.5"
+    "videogular-themes-default": "~1.2.5",
+    "malhar-angular-dashboard": "~1.0.1",
+    "angular-tiny-eventemitter": "~1.1.0"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
+  },
+  "resolutions": {
+    "angular-bootstrap": "0.12.x",
+    "angular": ">=1.4.*",
+    "bootstrap": "~3.3.1",
+    "lodash": "~3.10.1"
   }
 }

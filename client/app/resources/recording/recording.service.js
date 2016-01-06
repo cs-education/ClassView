@@ -26,15 +26,15 @@ angular.module('classViewApp.resources')
       		// Want videos between start and end interval
     		'where': JSON.stringify({
     			'startTime': {
-    				'>=': startTime
+    				'>=': startTime.toISOString()
     			},
     			'endTime': {
-    				'<=': endTime
+    				'<=': endTime.toISOString()
     			}
     		})
     	};
 
-      if (section) {
+      if (sectionID) {
         query.section = sectionID;
       }
 
@@ -43,5 +43,5 @@ angular.module('classViewApp.resources')
   })
 
   .factory('getUrlForVideo', ['API_BASE_URL', function (API_BASE_URL) {
-  	return filename => [API_BASE_URL, 'getVideo', filename].join('/');
+  	return filename => [API_BASE_URL, 'video', filename].join('/');
   }]);

@@ -13,7 +13,8 @@ angular.module('classViewApp', [
   'ui.bootstrap',
   'com.2fdevs.videogular',
   'com.2fdevs.videogular.plugins.controls',
-  'classViewApp.resources'
+  'classViewApp.resources',
+  'ui.dashboard'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     $locationProvider.html5Mode(true);

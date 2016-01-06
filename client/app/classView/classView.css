@@ -64,7 +64,7 @@ videogular, [videogular] {
         bottom: 50px; }
   videogular .iconButton, [videogular] .iconButton {
     color: #FFFFFF;
-    font-family: 'videogular';
+    font-family: 'font-awesome';
     speak: none;
     font-style: normal;
     font-weight: normal;
