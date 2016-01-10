@@ -1,22 +1,19 @@
 'use strict';
 
 angular.module('classViewApp')
-	.controller('ClassViewCtrl', ($scope, $q, Course, Section, Recording, buildIntervalQuery, getUrlForVideo, formatRecording, eventEmitter, _) => {
+	.controller('ClassViewCtrl', ($scope, $q, Course, Section, Recording, buildIntervalQuery, getUrlForVideo, formatRecording, _) => {
 		$scope.searchResults = [];
 		$scope.currentTime   = new Date(0); // default should be such that nothing can be after it
 
 		$scope.playingRecording = null;
 
 		$scope.$on('setPlayingRecording', (event, recording) => {
-			console.log('setPlayingRecording');
 			$scope.playingRecording = recording;
 			$scope.$broadcast('playingRecording', $scope.playingRecording);
 		});
 
 		$scope.$on('updateCurrentTime', (event, {recording, videoTime}) => {
-			console.log('updateCurrentTime');
 			if ($scope.playingRecording.id !== recording.id) {
-				console.log(`updateCurrentTime called by rogue widget ${recording.id}`);
 				return;
 			}
 			
@@ -26,15 +23,31 @@ angular.module('classViewApp')
 			$scope.currentTime = new Date(videoTimeMillis + videoStartTimeMillis);
 		});
 
-		$scope.$on('playbackDone', (event, recording) => {
-			console.log('playbackDone parent');
-			if ($scope.playingRecording && $scope.playingRecording.id !== recording.id) {
-				console.log('playbackDone called by rogue widget');
+		$scope.$on('videoPlaybackDone', (event, recording) => {
+			if ($scope.playingRecording.id !== recording.id) {
 				return;
 			}
 
 			$scope.playingRecording = null;
-			$scope.$broadcast('playbackDone', recording);
+
+			var lastRecording = _.last($scope.searchResults);
+
+			if (lastRecording.id === recording.id) {
+				$scope.currentTime = new Date(0); // will set all widgets to not live
+			} else {
+				$scope.$broadcast('nextVideo', recording);
+			}
+		});
+
+		$scope.$on('skipVideo', (event, recording) => {
+			// tell widgets to start playing the video after this recording in the playlist
+			var lastRecording = _.last($scope.searchResults);
+
+			if (lastRecording.id === recording.id) {
+				$scope.currentTime = new Date(0); // will set all widgets to not live
+			} else {
+				$scope.$broadcast('nextVideo', recording);
+			}
 		});
 
 		function resolvedPromise(val) {
@@ -65,7 +78,7 @@ angular.module('classViewApp')
 	  	}
 
 	  	function getRecordingTitle(recording) {
-	  		return `${getDateUIString(recording.startTime)} - ${getDateUIString(recording.endTime)} ID=${recording.id}`;
+	  		return `${getDateUIString(recording.startTime)} - ${getDateUIString(recording.endTime)}`;
 	  	}
 
 	  	function setRecordingData(recordings) {
@@ -81,7 +94,7 @@ angular.module('classViewApp')
 		  			var title = getRecordingTitle(recording);
 		  			return {
 		  				title: title,
-		  				name: title,
+		  				name: String(recording.id),
 		  				templateUrl: 'app/classView/videoWidget/videoWidget.html',
 		  				dataModelType: 'VideoWidgetDataModel',
 		  				dataModelArgs: {
@@ -95,7 +108,7 @@ angular.module('classViewApp')
 				        }
 		  			};
 		  		}),
-		  		defaultWidgets: $scope.searchResults.map(getRecordingTitle),
+		  		defaultWidgets: $scope.searchResults.map(recording => String(recording.id)), // must correspond to widget names
 		  		hideToolbar: true,
 		  		hideWidgetName: true,
 		  		hideWidgetSettings: true,
@@ -120,6 +133,7 @@ angular.module('classViewApp')
 	  		return searchForSectionRecordings({startTime, endTime}, sectionsPromise)
 	  		.then(recordings => {
 	  			setRecordingData(recordings);
+	  			return recordings;
 	  		});
 	  	});
 
