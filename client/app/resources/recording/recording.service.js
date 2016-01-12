@@ -22,21 +22,23 @@ angular.module('classViewApp.resources')
   	// API Docs specify query param format:
   	// 	http://sailsjs.org/documentation/reference/blueprint-api/find-where#?parameters
   	return ({startTime, endTime}, sectionID) => {
-      var query = {
-      		// Want videos between start and end interval
-    		'where': JSON.stringify({
-    			'startTime': {
-    				'>=': startTime.toISOString()
-    			},
-    			'endTime': {
-    				'<=': endTime.toISOString()
-    			}
-    		})
-    	};
+      var criteria = {
+        // Want videos between start and end interval
+        'startTime': {
+          '>=': startTime.toISOString()
+        },
+        'endTime': {
+          '<=': endTime.toISOString()
+        }
+      };
 
       if (sectionID) {
-        query.section = sectionID;
+        criteria.section = sectionID;
       }
+
+      var query = {
+  		  'where': JSON.stringify(criteria)
+    	};
 
       return query;
     };
