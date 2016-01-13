@@ -1,0 +1,12 @@
+<div class="media" ng-controller="CommentViewCtrl">
+	<div class="media-body">
+		<div class="media-heading"><strong>{{getCommentHeader()}}</strong></div>
+		<p>{{comment.content}}</p>
+		<div class="media-heading">
+			<a style="float: left" ng-click="loadReplies(); showReplies=!showReplies" ng-if="comment.replies.length">{{showReplies ? "Hide" : "Show"}} Replies ({{comment.replies.length}})</a><a style="float: right">Reply</a>
+		</div>
+		<div ng-if="comment.replies && showReplies">
+			<comment-view ng-repeat="reply in comment.replies" comment="reply"></comment-view>
+		</div>
+	</div>
+</div>

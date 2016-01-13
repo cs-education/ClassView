@@ -89,26 +89,28 @@ angular.module('classViewApp')
 			$scope.searchResults = _.sortByAll($scope.searchResults, ['startTime', 'endTime']);
 			$scope.currentTime = _.first($scope.searchResults).startTime;
 			
+			var widgetDefinitions = $scope.searchResults.map((recording, idx) => {
+	  			var title = getRecordingTitle(recording);
+	  			return {
+	  				title: title,
+	  				name: String(recording.id),
+	  				templateUrl: 'app/classView/videoWidget/videoWidget.html',
+	  				dataModelType: 'VideoWidgetDataModel',
+	  				dataModelArgs: {
+	  					recordings: $scope.searchResults,
+	  					title: title,
+	  					idx: idx
+	  				},
+			        size: {
+						width: '25%',
+						height: '25%'
+			        }
+	  			};
+	  		});
+
 		  	$scope.dashboardOptions = {
-		  		widgetDefinitions: $scope.searchResults.map((recording, idx) => {
-		  			var title = getRecordingTitle(recording);
-		  			return {
-		  				title: title,
-		  				name: String(recording.id),
-		  				templateUrl: 'app/classView/videoWidget/videoWidget.html',
-		  				dataModelType: 'VideoWidgetDataModel',
-		  				dataModelArgs: {
-		  					recordings: $scope.searchResults,
-		  					title: title,
-		  					idx: idx
-		  				},
-				        size: {
-							width: '25%',
-							height: '25%'
-				        }
-		  			};
-		  		}),
-		  		defaultWidgets: $scope.searchResults.map(recording => String(recording.id)), // must correspond to widget names
+		  		widgetDefinitions: widgetDefinitions,
+		  		defaultWidgets: _.pluck(widgetDefinitions, 'name'), // must correspond to widget names
 		  		hideToolbar: true,
 		  		hideWidgetName: true,
 		  		hideWidgetSettings: true,

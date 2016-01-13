@@ -24,6 +24,14 @@ angular.module('classViewApp')
     		method: 'GET',
     		url: `${API_BASE_URL}/user/me`,
     		isArray: false
-    	}
+    	},
+        update: {
+            method: 'PUT',
+            url: `${API_BASE_URL}/user/:id`,
+            params: {
+                id: '@id'
+            },
+            isArray: false
+        }
     });
   });
