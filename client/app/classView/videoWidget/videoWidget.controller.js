@@ -30,6 +30,7 @@ angular.module('classViewApp')
 		$scope.onUpdateTime = currTime => $scope.videoTime = currTime;
 		$scope.onStateChange = state => $scope.currState = state;
 
+		// Helpers for checking current state
 		$scope.isPlaying = () => $scope.currState === 'play';
 		$scope.isPaused = () => $scope.currState === 'pause';
 		$scope.isStopped = () => $scope.currState === 'stop';

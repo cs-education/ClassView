@@ -70,11 +70,13 @@ angular.module('classViewApp')
 	  		});
 	  	}
 
+	  	// given a JS Date, returns string of just the time in a simple human readable format
 	  	function getDateUIString(date) {
 	  		var amPm = date.getHours() >= 11 ? 'PM' : 'AM';
 	  		var hour = (date.getHours() % 12) + 1;
-	  		var min = date.getMinutes();
-	  		return `${hour}:${min} ${amPm}`;
+	  		var minStr = String(date.getMinutes());
+	  		minStr = minStr.length < 2 ? `0${minStr}` : minStr; // pad with a 0 if minutes is single digit
+	  		return `${hour}:${minStr} ${amPm}`;
 	  	}
 
 	  	function getRecordingTitle(recording) {
