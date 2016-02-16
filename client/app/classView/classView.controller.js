@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('classViewApp')
-	.controller('ClassViewCtrl', ($scope, $q, Course, Section, Recording, buildIntervalQuery, getUrlForVideo, formatRecording, _) => {
+	.controller('ClassViewCtrl', ($scope, $q, Course, Section, Recording, buildIntervalQuery, getUrlForVideo, formatRecording, moment, _) => {
 		$scope.searchResults = [];
 		$scope.currentTime   = new Date(0); // default should be such that nothing can be after it
 
@@ -70,17 +70,8 @@ angular.module('classViewApp')
 	  		});
 	  	}
 
-	  	// given a JS Date, returns string of just the time in a simple human readable format
-	  	function getDateUIString(date) {
-	  		var amPm = date.getHours() >= 11 ? 'PM' : 'AM';
-	  		var hour = (date.getHours() % 12) + 1;
-	  		var minStr = String(date.getMinutes());
-	  		minStr = minStr.length < 2 ? `0${minStr}` : minStr; // pad with a 0 if minutes is single digit
-	  		return `${hour}:${minStr} ${amPm}`;
-	  	}
-
 	  	function getRecordingTitle(recording) {
-	  		return `${getDateUIString(recording.startTime)} - ${getDateUIString(recording.endTime)}`;
+	  		return `${moment(recording.startTime).format('LT')} - ${moment(recording.endTime).format('LT')}`;
 	  	}
 
 	  	function setRecordingData(recordings) {
