@@ -1,0 +1,28 @@
+<div ng-controller="CommentListWidgetCtrl" class="panel-body">
+  <div class="clearfix">
+    <div class="pull-left">
+      <!-- TODO: fixme, then pull-right
+      <button type="button" class="btn" ng-class="autoScrollClass()"
+        ng-click="toggleAutoScroll()">
+        <span ng-show="autoScroll" class="glyphicon glyphicon-play"></span>
+        <span ng-hide="autoScroll" class="glyphicon glyphicon-pause"></span>
+        Automatic Scroll
+      </button>
+      -->
+      <button type="button" class="btn btn-primary" ng-click="newComment()">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Comment
+      </button>
+    </div>
+  </div>
+  <br>
+	<ul class="media-list">
+    <li ng-show="comments.length == 0">No comments yet!</li>
+    <li ng-repeat="comment in comments">
+      <a href="" ng-style="linkStyle(comment, $index)"
+        ng-click="clickLink($index)" ng-if="!comment.parent">
+        {{formatTime(comment.time)}} {{comment.content}}
+      </a>
+		</li>
+	</ul>
+</div>
