@@ -12,7 +12,9 @@ angular.module('classViewApp')
 			$scope.$broadcast('playingRecording', $scope.playingRecording);
 		});
 
-		$scope.$on('updateCurrentTime', (event, {recording, videoTime}) => {
+		$scope.$on('updateCurrentTime', (event, params) => {
+      var recording = params.recording;
+      var videoTime = params.videoTime;
 			if ($scope.playingRecording.id !== recording.id) {
 				return;
 			}
@@ -21,6 +23,7 @@ angular.module('classViewApp')
 			var videoStartTimeMillis = recording.startTime.getTime();
 			
 			$scope.currentTime = new Date(videoTimeMillis + videoStartTimeMillis);
+      $scope.$broadcast('broadcastCurrentTime', $scope.currentTime);
 		});
 
 		$scope.$on('videoPlaybackDone', (event, recording) => {
@@ -49,6 +52,14 @@ angular.module('classViewApp')
 				$scope.$broadcast('nextVideo', recording);
 			}
 		});
+
+    // for commentListWidget communication to commentWidget
+    $scope.$on('changeComment', function (event, newComment) {
+      $scope.$broadcast('commentWidgetChangeComment', newComment);
+    });
+    $scope.$on('commentsWidgetNewComment', function (event, comment) {
+      $scope.$broadcast('commentListNewComment', comment);
+    });
 
 		function resolvedPromise(val) {
 			var deferred = $q.defer();
@@ -101,6 +112,36 @@ angular.module('classViewApp')
 	  			};
 	  		});
 
+      var commentWidget = {
+        title: 'Comments',
+        name: 'comments',
+        templateUrl: 'app/classView/commentsWidget/commentsWidget.html',
+        dataModelType: 'CommentWidgetDataModel',
+        dataModelArgs: {
+          recordings: $scope.searchResults
+        },
+        size: {
+          width: '60%',
+          height: '25%'
+        }
+      };
+      widgetDefinitions.push(commentWidget);
+
+      var commentListWidget = {
+        title: 'Comment List',
+        name: 'commentList',
+        templateUrl: 'app/classView/commentListWidget/commentListWidget.html',
+        dataModelType: 'CommentListWidgetDataModel',
+        dataModelArgs: {
+          recordings: $scope.searchResults
+        },
+        size: {
+          width: '40%',
+          height: '75%'
+        }
+      };
+      widgetDefinitions.push(commentListWidget);
+
 		  	$scope.dashboardOptions = {
 		  		widgetDefinitions: widgetDefinitions,
 		  		defaultWidgets: _.pluck(widgetDefinitions, 'name'), // must correspond to widget names
@@ -111,7 +152,9 @@ angular.module('classViewApp')
 		  	};
 	  	}
 
-	  	function searchForSectionRecordings({startTime, endTime}, sectionsPromise) {
+	  	function searchForSectionRecordings(params, sectionsPromise) {
+        var startTime = params.startTime;
+        var endTime = params.endTime;
 	  		return sectionsPromise
 	  			.then(section => {
 					var queryParams = buildIntervalQuery({startTime, endTime}, section.id);
@@ -121,7 +164,9 @@ angular.module('classViewApp')
 	  			});
 	  	}
 
-	  	$scope.mediaPlayer.onSetInterval(({startTime, endTime}) => {
+	  	$scope.mediaPlayer.onSetInterval((params) => {
+        var startTime = params.startTime;
+        var endTime = params.endTime;
 	  		$scope.startTime = startTime;
 	  		$scope.endTime = endTime;
 
@@ -152,6 +197,7 @@ angular.module('classViewApp')
 	  		}, sectionsPromise)
 	  		.then(recordings => {
 	  			setRecordingData(recordings);
+          $scope.$broadcast('broadcastNewRecording', recordings);
 	  		});
 	  		didFirstRequest = true;
 	  	});

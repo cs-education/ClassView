@@ -129,6 +129,7 @@ angular.module('classViewApp')
 		});
 
 		$scope.$watch('videoTime', (newVidTime, oldVidTime) => {
+      $scope.$broadcast('broadcastCurrentTime', $scope.currentTime);
 			if (newVidTime === oldVidTime) {
 				return;
 			}

@@ -1,6 +1,30 @@
 <div ng-controller="CommentsWidgetCtrl" class="panel-body">
-	<ul class="media-list">
-		<comment-view ng-repeat="comment in comments" comment="comment">
-		</comment-view>
-	</ul>
+  <span ng-show="comment != null">
+    <span ng-repeat="comment in comments">
+      <span ng-if="comment.poster">
+        <strong>{{lookupId(comment.poster)}}: </strong>
+      </span>
+      <span ng-if="!comment.poster">
+        <strong>Anonymous: </strong>
+      </span>
+      {{comment.content}}<br>
+    </span>
+  </span>
+
+  <div>
+    <textarea class="form-control" ng-model="content" rows="3" style="resize:vertical"></textarea>
+
+    <div style="height:4px"></div>
+
+    <div class="btn-group" style="position:absolute">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{postAs}} <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="choice in postAsList" ng-click="$parent.postAs = choice">
+          <a href="#">{{choice}}</a>
+        </li>
+      </ul>
+    </div>
+
+    <button type="button" class="btn btn-primary pull-right" ng-disabled="postDisabled || !content" ng-click="post()">{{comment ? 'Reply' : 'Post'}}</button>
+  </div>
 </div>
