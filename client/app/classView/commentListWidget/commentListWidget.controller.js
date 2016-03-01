@@ -3,20 +3,16 @@
 angular.module('classViewApp')
 	.controller('CommentListWidgetCtrl', ($scope, $q, _, Comment, moment) => {
     // update list of comments when commentWidget makes a new comment
-    $scope.$on('commentListNewComment', function (event, comment) {
-      // TODO: insert efficiently
-      if (comment.parent) {
-        for (var i = 0; i < $scope.comments.length; i++) {
-          if ($scope.comments[i].id == comment.parent) {
-            if (!$scope.comments[i].replies)
-              $scope.comments[i].replies = [];
-            $scope.comments[i].replies.push(comment);
-            break;
-          }
+    $scope.$on('commentListNewComment', function (event, newComment) {
+      if (newComment.parent) {
+        var parentComment = _.find($scope.comments, ['id', newComment.parent]);
+        if (parentComment) {
+          parentComment.replies = parentComment.replies || [];
+          parentComment.replies.push(newComment);
         }
       } else {
-        $scope.comments.push(comment);
-        sortComments();
+        var index = _.sortedIndexBy($scope.comments, newComment, commentSortProperty);
+        $scope.comments.splice(index, 0, newComment);
       }
     });
 
@@ -97,21 +93,24 @@ angular.module('classViewApp')
 
     // creates a lookup table from user.id to user.name
     function createLookupTable(comments) {
-      var result = {};
-      for (var i = 0; i < comments.length; i++) {
-        var poster = comments[i].poster;
-        if (comments[i].poster) {
-          result[poster.id] = poster.firstName + ' ' + poster.lastName;
+      return _.reduce(comments, function (accumulator, comment) {
+        var poster = comment.poster;
+        if (_.isObject(poster)) {
+          accumulator[poster.id] = `${poster.firstName} ${poster.lastName}`;
         }
-      }
-      return result;
+        return accumulator;
+      }, {});
     }
 
     // sort the comments
     function sortComments() {
       $scope.comments.sort(function (a, b) {
-        return new Date(a.time) - new Date(b.time);
+        return commentSortProperty(a) - commentSortProperty(b);
       });
+    }
+
+    function commentSortProperty(comment) {
+      return new Date(comment.time);
     }
 
     // for the auto-scroll button
