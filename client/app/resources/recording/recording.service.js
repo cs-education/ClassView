@@ -45,5 +45,11 @@ angular.module('classViewApp.resources')
   })
 
   .factory('getUrlForVideo', ['API_BASE_URL', function (API_BASE_URL) {
-  	return filename => [API_BASE_URL, 'video', filename].join('/');
+  	return function (filename) {
+      if (_.startsWith(filename, 'http://') || _.startsWith(filename, 'https://')) {
+        return filename;
+      } else {
+        return [API_BASE_URL, 'video', filename].join('/');
+      }
+    };
   }]);
